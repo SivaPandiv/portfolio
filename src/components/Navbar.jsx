@@ -37,7 +37,7 @@ export default function Navbar() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          &lt;VSP /&gt;
+          &lt;V.SP&gt;
         </motion.a>
 
         {/* Nav Links */}
