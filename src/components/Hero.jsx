@@ -141,28 +141,6 @@ export default function Hero() {
 
         {/* Right Content Area (Image + Sketchfab Selector) */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {/* Interactive Segmented Mode Selector Toggle */}
-          <div className="toggle-bar">
-            <button 
-              className={`toggle-btn ${activeTab === 'avatar' ? 'active' : ''}`}
-              onClick={() => setActiveTab('avatar')}
-            >
-              3D Coder Boy
-            </button>
-            <button 
-              className={`toggle-btn ${activeTab === 'robot' ? 'active' : ''}`}
-              onClick={() => setActiveTab('robot')}
-            >
-              3D Robot Mech
-            </button>
-            <button 
-              className={`toggle-btn ${activeTab === 'setup' ? 'active' : ''}`}
-              onClick={() => setActiveTab('setup')}
-            >
-              3D Dev Setup
-            </button>
-          </div>
-
           {/* Dynamic Graphic Container */}
           <motion.div
              initial={{ opacity: 0, scale: 0.9 }}
