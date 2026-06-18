@@ -24,7 +24,7 @@ export default function Navbar() {
         </motion.div>
         
         <ul className="nav-links">
-          {['About', 'Projects', 'Contact'].map((item, index) => (
+          {['About', 'Projects', 'Certifications', 'Contact'].map((item, index) => (
             <motion.li 
               key={item}
               initial={{ opacity: 0, y: -10 }}

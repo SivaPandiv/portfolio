@@ -2,23 +2,24 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
+import Certifications from './components/Certifications';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ParticleBackground from './components/ParticleBackground';
 
 function App() {
   return (
     <>
-      {/* Background Blobs for Global Glassmorphism Aesthetics */}
-      <div className="background-blobs">
-        <div className="blob blob-1"></div>
-        <div className="blob blob-2"></div>
-      </div>
+      {/* Dynamic Interactive Backgrounds */}
+      <ParticleBackground />
+      <div className="bg-grid"></div>
 
       <Navbar />
       <main>
         <Hero />
         <About />
         <Projects />
+        <Certifications />
         <Contact />
       </main>
       <Footer />
