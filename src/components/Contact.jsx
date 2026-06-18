@@ -43,13 +43,14 @@ export default function Contact() {
         
         {/* Section Header */}
         <motion.h2 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="section-title text-center"
         >
           Get In <span className="gradient-text">Touch</span>
         </motion.h2>
+        <div className="section-divider"></div>
 
         <div className="contact-grid">
           

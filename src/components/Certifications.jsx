@@ -37,15 +37,16 @@ export default function Certifications() {
         
         {/* Section Title */}
         <motion.h2 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="section-title text-center"
         >
-          Certifications & <span className="gradient-text">Achievements</span>
+          Certifications &amp; <span className="gradient-text">Achievements</span>
         </motion.h2>
+        <div className="section-divider"></div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', marginTop: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', marginTop: '1rem' }}>
           
           {/* Certifications List */}
           <div>

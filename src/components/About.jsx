@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiCode, FiLayers, FiCpu, FiDatabase, FiSettings, FiBookOpen, FiBriefcase } from 'react-icons/fi';
+import { FiCode, FiLayers, FiCpu, FiDatabase, FiSettings, FiBookOpen, FiBriefcase, FiSliders, FiTerminal } from 'react-icons/fi';
 
 export default function About() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -8,10 +8,10 @@ export default function About() {
   const skillCategories = [
     { id: 'All', name: 'All Skills', icon: <FiLayers /> },
     { id: 'Programming', name: 'Programming Languages', icon: <FiCode /> },
-    { id: 'WebDev', name: 'Software Development', icon: <FiLayers /> },
-    { id: 'Tools', name: 'Tools & IDEs', icon: <FiSettings /> },
+    { id: 'WebDev', name: 'Software Development', icon: <FiTerminal /> },
+    { id: 'Databases', name: 'Databases', icon: <FiDatabase /> },
     { id: 'AI_ML', name: 'AI / Machine Learning', icon: <FiCpu /> },
-    { id: 'Databases', name: 'Databases', icon: <FiDatabase /> }
+    { id: 'Tools', name: 'Tools & IDEs', icon: <FiSettings /> }
   ];
 
   const skillsData = [
@@ -105,14 +105,14 @@ export default function About() {
     <section id="about" className="section">
       <div className="container">
         <motion.h2 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="section-title text-center"
         >
           About <span className="gradient-text">Me</span>
         </motion.h2>
-        
+        <div className="section-divider"></div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '4rem', marginTop: '1rem' }}>
           
           {/* Left Column: Education & Experience */}
@@ -173,7 +173,9 @@ export default function About() {
 
           {/* Right Column: Skills */}
           <div>
-            <h3 className="text-2xl" style={{ marginBottom: '2rem', color: 'var(--accent-primary)' }}>My Skills</h3>
+            <h3 className="text-2xl flex items-center gap-1" style={{ marginBottom: '2rem', color: 'var(--accent-primary)' }}>
+              <FiSliders style={{ fontSize: '1.5rem' }} /> My Skills
+            </h3>
             
             {/* Interactive Category Selector */}
             <div className="skills-tabs">
@@ -206,18 +208,21 @@ export default function About() {
                     layout
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    whileHover={{ scale: 1.05, y: -4 }}
+                    whileHover={{ scale: 1.06, y: -5 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.2 }}
                     key={skill.name}
-                    className="glass flex flex-col items-center justify-center"
+                    className="glass skill-card flex flex-col items-center justify-center"
                     style={{ padding: '1.25rem', borderRadius: '1rem', textAlign: 'center', cursor: 'default' }}
                   >
-                    <div className="gradient-text" style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+                    <div className="gradient-text" style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.2rem' }}>
                       {skill.name}
                     </div>
-                    <div className="text-muted text-sm" style={{ fontSize: '0.75rem' }}>
+                    <div className="text-muted text-sm" style={{ fontSize: '0.72rem', marginBottom: '0.5rem' }}>
                       {skill.category === 'AI_ML' ? 'AI / ML' : skill.category}
+                    </div>
+                    <div className="progress-track" style={{ width: '80%' }}>
+                      <div className="progress-fill" style={{ width: skill.level }}></div>
                     </div>
                   </motion.div>
                 ))}
