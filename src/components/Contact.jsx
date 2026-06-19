@@ -1,19 +1,51 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import { FiMail, FiLinkedin, FiGithub, FiSend, FiUser, FiMessageSquare } from 'react-icons/fi';
+import { fadeUp, fadeLeft, fadeRight, staggerContainer, viewport } from '../utils/animations';
+
+// ─── EmailJS Config ───────────────────────────────────────────────
+// 1. Go to https://dashboard.emailjs.com
+// 2. Create a Gmail service  →  copy Service ID below
+// 3. Create a template with variables: {{from_name}}, {{from_email}}, {{message}}
+//    Set "To Email" = vsivapandi86@gmail.com  →  copy Template ID below
+// 4. Account > API Keys  →  copy Public Key below
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'abc123XYZ'
+// ─────────────────────────────────────────────────────────────────
 
 export default function Contact() {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormState({ name: '', email: '', message: '' });
-    }, 4000);
+
+    setStatus('loading');
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name:  formState.name,
+          from_email: formState.email,
+          message:    formState.message,
+          to_email:   'vsivapandi86@gmail.com',
+        },
+        EMAILJS_PUBLIC_KEY
+      );
+      setStatus('success');
+      setTimeout(() => {
+        setStatus('idle');
+        setFormState({ name: '', email: '', message: '' });
+      }, 4000);
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3500);
+    }
   };
 
   const contactLinks = [
@@ -21,206 +53,235 @@ export default function Contact() {
       label: "Email Me",
       value: "vsivapandi86@gmail.com",
       href: "mailto:vsivapandi86@gmail.com",
-      icon: <FiMail />
+      icon: <FiMail />,
+      color: '#38bdf8'
     },
     {
       label: "LinkedIn Profile",
-      value: "linkedin.com/in/siva-pandi-v-4b75492a3",
+      value: "linkedin.com/in/siva-pandi-v",
       href: "https://www.linkedin.com/in/siva-pandi-v-4b75492a3",
-      icon: <FiLinkedin />
+      icon: <FiLinkedin />,
+      color: '#818cf8'
     },
     {
       label: "GitHub Repositories",
-      value: "github.com/ssivapandi",
-      href: "https://github.com/ssivapandi",
-      icon: <FiGithub />
+      value: "github.com/SivaPandiv",
+      href: "https://github.com/SivaPandiv",
+      icon: <FiGithub />,
+      color: '#34d399'
     }
   ];
 
   return (
     <section id="contact" className="section">
       <div className="container">
-        
+
         {/* Section Header */}
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="section-title text-center"
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={viewport}
+          className="section-header"
         >
-          Get In <span className="gradient-text">Touch</span>
-        </motion.h2>
-        <div className="section-divider"></div>
+          <span className="section-eyebrow">Let's Connect</span>
+          <h2 className="section-title text-center">
+            Get In <span className="gradient-text">Touch</span>
+          </h2>
+          <div className="section-divider" />
+        </motion.div>
 
         <div className="contact-grid">
-          
-          {/* Left Column: Contact Cards */}
+
+          {/* Left Column: Contact Info */}
           <div>
-            <motion.h3 
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+            <motion.h3
+              variants={fadeLeft} initial="hidden" whileInView="show" viewport={viewport}
               className="text-2xl"
-              style={{ marginBottom: '1rem', color: 'var(--accent-primary)', fontWeight: 700 }}
+              style={{ marginBottom: '0.75rem', color: 'var(--accent-primary)', fontWeight: 700 }}
             >
               Let's build something great.
             </motion.h3>
-            <motion.p 
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+            <motion.p
+              variants={fadeLeft} initial="hidden" whileInView="show" viewport={viewport}
               className="text-muted text-sm"
-              style={{ marginBottom: '2.5rem', maxWidth: '400px', lineHeight: '1.6' }}
+              style={{ marginBottom: '2rem', maxWidth: '380px', lineHeight: '1.7' }}
             >
-              I am currently looking for new developer or analyst opportunities. Whether you have a project in mind, a question, or just want to connect, feel free to reach out!
+              I am currently looking for new developer or data scientist opportunities.
+              Whether you have a project in mind, a question, or just want to connect —
+              feel free to reach out!
             </motion.p>
 
-            <div className="flex flex-col">
+            <motion.div
+              variants={staggerContainer(0.12)}
+              initial="hidden" whileInView="show" viewport={viewport}
+              className="flex flex-col"
+              style={{ gap: '0.85rem' }}
+            >
               {contactLinks.map((link, index) => (
-                <motion.a 
+                <motion.a
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
                   key={index}
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.15 }}
+                  variants={fadeLeft}
+                  whileHover={{ x: 6, scale: 1.02 }}
                   className="glass contact-card"
+                  style={{ marginBottom: 0, borderRadius: '1rem', padding: '1.1rem 1.4rem' }}
                 >
-                  <div className="contact-card-icon">
+                  <div className="contact-card-icon" style={{
+                    background: `${link.color}12`,
+                    borderColor: `${link.color}30`,
+                    color: link.color
+                  }}>
                     {link.icon}
                   </div>
                   <div>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                    <h4 style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                       {link.label}
                     </h4>
-                    <p style={{ fontSize: '0.95rem', color: '#fff', fontWeight: 700, marginTop: '0.2rem' }}>
+                    <p style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 700, marginTop: '0.2rem' }}>
                       {link.value}
                     </p>
                   </div>
                 </motion.a>
               ))}
-            </div>
+            </motion.div>
           </div>
 
-          {/* Right Column: Glassmorphic Message Form */}
+          {/* Right Column: Message Form */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            variants={fadeRight}
+            initial="hidden" whileInView="show" viewport={viewport}
             className="glass"
-            style={{ padding: '2.5rem', borderRadius: '1.5rem', position: 'relative' }}
+            style={{ padding: '2.25rem', borderRadius: '1.5rem', position: 'relative' }}
           >
             <AnimatePresence mode="wait">
-              {!isSubmitted ? (
-                <motion.form 
+              {status === 'success' ? (
+                <motion.div
+                  key="success-message"
+                  initial={{ opacity: 0, scale: 0.88, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', justifyContent: 'center',
+                    minHeight: '340px', textAlign: 'center'
+                  }}
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', delay: 0.15, stiffness: 200 }}
+                    style={{
+                      width: '64px', height: '64px', borderRadius: '50%',
+                      background: 'rgba(52,211,153,0.12)',
+                      border: '1px solid rgba(52,211,153,0.25)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '1.75rem', color: '#34d399', marginBottom: '1.5rem'
+                    }}
+                  >
+                    ✓
+                  </motion.div>
+                  <h3 className="text-2xl" style={{ marginBottom: '0.75rem', fontWeight: 800 }}>Message Ready!</h3>
+                  <p className="text-muted text-sm" style={{ maxWidth: '280px', lineHeight: '1.6' }}>
+                    Your mail client has opened with the pre-filled message. Just hit Send!
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.form
                   key="contact-form"
                   onSubmit={handleSubmit}
                   initial={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  variants={staggerContainer(0.1, 0.1)}
+                  animate="show"
                 >
-                  {/* Name Input */}
-                  <div className="form-group">
+                  <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: '1.5rem' }}>
+                    Send me a message
+                  </h4>
+
+                  {/* Name */}
+                  <motion.div variants={fadeUp} className="form-group">
                     <label className="form-label flex items-center gap-1">
-                      <FiUser style={{ color: 'var(--accent-primary)' }} /> Name
+                      <FiUser style={{ color: 'var(--accent-primary)' }} /> Your Name
                     </label>
-                    <input 
-                      type="text" 
-                      placeholder="Your name" 
+                    <input
+                      type="text"
+                      placeholder="e.g. Siva Pandi"
                       className="form-input"
                       value={formState.name}
                       onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                       required
                     />
-                  </div>
+                  </motion.div>
 
-                  {/* Email Input */}
-                  <div className="form-group">
+                  {/* Email */}
+                  <motion.div variants={fadeUp} className="form-group">
                     <label className="form-label flex items-center gap-1">
                       <FiMail style={{ color: 'var(--accent-primary)' }} /> Email Address
                     </label>
-                    <input 
-                      type="email" 
-                      placeholder="you@example.com" 
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
                       className="form-input"
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                       required
                     />
-                  </div>
+                  </motion.div>
 
-                  {/* Message Input */}
-                  <div className="form-group">
+                  {/* Message */}
+                  <motion.div variants={fadeUp} className="form-group">
                     <label className="form-label flex items-center gap-1">
                       <FiMessageSquare style={{ color: 'var(--accent-primary)' }} /> Message
                     </label>
-                    <textarea 
-                      placeholder="Write your message here..." 
+                    <textarea
+                      placeholder="Tell me about your project or just say hello!"
                       className="form-input"
-                      style={{ minHeight: '120px', resize: 'vertical' }}
+                      style={{ minHeight: '110px', resize: 'vertical' }}
                       value={formState.message}
                       onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                       required
                     />
-                  </div>
-
-                  {/* Submit Button */}
-                  <button 
-                    type="submit" 
-                    className="btn btn-primary flex items-center gap-1"
-                    style={{ width: '100%', padding: '1rem', marginTop: '1rem', borderRadius: '0.75rem' }}
-                  >
-                    <span>Send Message</span>
-                    <FiSend style={{ transition: 'transform 0.3s' }} />
-                  </button>
-                </motion.form>
-              ) : (
-                <motion.div 
-                  key="success-message"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  style={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    minHeight: '340px',
-                    textAlign: 'center' 
-                  }}
-                >
-                  <motion.div 
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', delay: 0.1 }}
-                    style={{ 
-                      width: '60px', 
-                      height: '60px', 
-                      borderRadius: '50%', 
-                      background: 'rgba(56, 189, 248, 0.1)', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      fontSize: '2rem',
-                      color: 'var(--accent-primary)',
-                      marginBottom: '1.5rem'
-                    }}
-                  >
-                    <FiSend />
                   </motion.div>
-                  <h3 className="text-2xl" style={{ marginBottom: '0.75rem', fontWeight: 800 }}>Message Sent!</h3>
-                  <p className="text-muted text-sm" style={{ maxWidth: '280px', lineHeight: '1.6' }}>
-                    Thank you for reaching out, {formState.name}. I'll get back to you as soon as possible.
-                  </p>
-                </motion.div>
+
+                  {/* Error message */}
+                  {status === 'error' && (
+                    <p style={{ color: '#f87171', fontSize: '0.82rem', marginBottom: '0.75rem' }}>
+                      Something went wrong. Please email me directly at vsivapandi86@gmail.com
+                    </p>
+                  )}
+
+                  {/* Submit */}
+                  <motion.div variants={fadeUp}>
+                    <button
+                      type="submit"
+                      disabled={status === 'loading'}
+                      className="btn btn-primary flex items-center gap-1"
+                      style={{
+                        width: '100%', padding: '0.9rem', marginTop: '0.5rem',
+                        borderRadius: '0.85rem', opacity: status === 'loading' ? 0.75 : 1,
+                        cursor: status === 'loading' ? 'not-allowed' : 'pointer'
+                      }}
+                    >
+                      {status === 'loading' ? (
+                        <>
+                          <span>Opening Mail…</span>
+                          <FiLoader style={{ animation: 'spin 1s linear infinite' }} />
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Message</span>
+                          <FiSend />
+                        </>
+                      )}
+                    </button>
+                  </motion.div>
+                </motion.form>
               )}
             </AnimatePresence>
           </motion.div>
 
         </div>
-
       </div>
     </section>
   );

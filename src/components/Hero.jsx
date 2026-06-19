@@ -1,277 +1,212 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FiArrowRight, FiCode, FiDatabase, FiCpu, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiArrowRight, FiCode, FiDatabase, FiCpu, FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import profileImg from '../assets/coder_boy_avatar.png';
+import { fadeUp, fadeLeft, scaleIn, staggerContainer } from '../utils/animations';
+
+const ROLES = ['Software Developer', 'Data Scientist', 'Full Stack Developer'];
 
 export default function Hero() {
-  const [activeTab, setActiveTab] = useState('avatar'); // 'avatar', 'robot', 'setup'
+  const [activeTab, setActiveTab] = useState('avatar');
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Typewriter effect
+  useEffect(() => {
+    const current = ROLES[roleIndex];
+    let timeout;
+
+    if (!isDeleting && displayed.length < current.length) {
+      timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 80);
+    } else if (!isDeleting && displayed.length === current.length) {
+      timeout = setTimeout(() => setIsDeleting(true), 1800);
+    } else if (isDeleting && displayed.length > 0) {
+      timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 45);
+    } else if (isDeleting && displayed.length === 0) {
+      setIsDeleting(false);
+      setRoleIndex((i) => (i + 1) % ROLES.length);
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, isDeleting, roleIndex]);
+
+  const stats = [
+    { val: '3+',   label: 'Internships',  color: '#3b82f6' },
+    { val: '7.79', label: 'BE CGPA',      color: '#06b6d4' },
+    { val: '20+',  label: 'Tech Skills',  color: '#818cf8' },
+    { val: '6+',   label: 'Projects',     color: '#34d399' },
+  ];
 
   return (
-    <section className="section flex items-center justify-center" style={{ minHeight: '100vh', paddingTop: '80px', position: 'relative', overflow: 'hidden' }}>
-      {/* Background glow blobs */}
-      <div className="hero-glow-1"></div>
-      <div className="hero-glow-2"></div>
+    <section className="section flex items-center justify-center"
+      style={{ minHeight: '100vh', paddingTop: '80px', position: 'relative', overflow: 'hidden' }}>
+      <div className="hero-glow-1" />
+      <div className="hero-glow-2" />
 
-      <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-        
-        {/* Left Content */}
-        <div style={{ textAlign: 'left' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-1"
-            style={{ marginBottom: '1rem' }}
-          >
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-primary)', display: 'inline-block', boxShadow: '0 0 8px var(--accent-primary)' }}></span>
-            <h4 className="text-xl text-muted" style={{ margin: 0, fontWeight: 500, letterSpacing: '0.5px' }}>
-              Hello, world! I am
-            </h4>
+      <div className="container" style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '4rem', alignItems: 'center', position: 'relative', zIndex: 1
+      }}>
+
+        {/* ── Left Content ── */}
+        <motion.div
+          variants={staggerContainer(0.1, 0.1)}
+          initial="hidden" animate="show"
+          style={{ textAlign: 'left' }}
+        >
+          {/* Availability chip */}
+          <motion.div variants={fadeUp} style={{ marginBottom: '1.25rem' }}>
+            <span className="hero-available-chip">
+              <span className="hero-pulse-dot" />
+              Available for opportunities
+            </span>
           </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl"
-            style={{ marginBottom: '1.25rem', fontWeight: 800, letterSpacing: '-1.5px' }}
-          >
+
+          {/* Name */}
+          <motion.h1 variants={fadeUp} className="text-5xl"
+            style={{ marginBottom: '0.75rem', fontWeight: 800, letterSpacing: '-1.5px' }}>
             V. <span className="gradient-text">Siva Pandi</span>
           </motion.h1>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-wrap gap-1 items-center"
-            style={{ marginBottom: '1.75rem' }}
-          >
-            <span className="badge" style={{ fontSize: '0.85rem', padding: '0.35rem 0.95rem' }}>Software Developer</span>
-            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.75rem' }}>•</span>
-            <span className="badge" style={{ fontSize: '0.85rem', padding: '0.35rem 0.95rem', background: 'rgba(236,72,153,0.08)', borderColor: 'rgba(236,72,153,0.22)', color: 'var(--accent-secondary)' }}>Data Analyst</span>
-            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '0.75rem' }}>•</span>
-            <span className="badge" style={{ fontSize: '0.85rem', padding: '0.35rem 0.95rem', background: 'rgba(245,158,11,0.08)', borderColor: 'rgba(245,158,11,0.22)', color: 'var(--accent-tertiary)' }}>B.E CSE Graduate</span>
+
+          {/* Typewriter role line */}
+          <motion.div variants={fadeUp} style={{ marginBottom: '1.5rem', minHeight: '2.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 500 }}>I'm a</span>
+            <span className="typewriter-text">
+              {displayed}
+              <span className="typewriter-cursor">|</span>
+            </span>
           </motion.div>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="text-lg text-muted"
-            style={{ marginBottom: '2rem', maxWidth: '600px', lineHeight: '1.7', fontSize: '1.05rem' }}
-          >
-            Results-driven Full Stack Developer skilled in <strong>HTML, CSS, JavaScript, Python, relational databases</strong>, and also focused on <strong>Data Analytics</strong>. Experienced in RESTful APIs, Git, and deployment workflows, building scalable and high-performance web applications. Ready to deliver clean code and impactful solutions.
+          {/* Bio */}
+          <motion.p variants={fadeUp} className="text-muted"
+            style={{ marginBottom: '2rem', maxWidth: '520px', lineHeight: '1.8', fontSize: '0.97rem' }}>
+            Results-driven developer skilled in{' '}
+            <span className="hero-highlight">HTML, CSS, JavaScript, Python</span> and relational databases.
+            Passionate about <span className="hero-highlight">Data Science & ML</span>, building
+            scalable web apps and delivering clean, impactful solutions.
           </motion.p>
 
-          {/* Quick Stats Grid */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="grid"
-            style={{ 
-              gridTemplateColumns: 'repeat(3, 1fr)', 
-              gap: '1rem', 
-              marginBottom: '2.5rem', 
-              maxWidth: '500px' 
-            }}
-          >
-            <div className="glass" style={{ padding: '0.75rem 1rem', borderRadius: '1rem', textAlign: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div className="gradient-text" style={{ fontSize: '1.5rem', fontWeight: 800 }}>3+</div>
-              <div className="text-muted" style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Internships</div>
-            </div>
-            <div className="glass" style={{ padding: '0.75rem 1rem', borderRadius: '1rem', textAlign: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div className="gradient-text" style={{ fontSize: '1.5rem', fontWeight: 800 }}>8.00</div>
-              <div className="text-muted" style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>BE CGPA</div>
-            </div>
-            <div className="glass" style={{ padding: '0.75rem 1rem', borderRadius: '1rem', textAlign: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div className="gradient-text" style={{ fontSize: '1.5rem', fontWeight: 800 }}>20+</div>
-              <div className="text-muted" style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tech Skills</div>
-            </div>
+          {/* Stats row */}
+          <motion.div variants={staggerContainer(0.1, 0)}
+            style={{ display: 'flex', gap: '1rem', marginBottom: '2.25rem', flexWrap: 'wrap' }}>
+            {stats.map((s) => (
+              <motion.div key={s.label} variants={scaleIn}
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  padding: '0.6rem 1.1rem', borderRadius: '0.85rem',
+                  background: `${s.color}0d`,
+                  border: `1px solid ${s.color}25`,
+                  minWidth: '80px', textAlign: 'center'
+                }}>
+                <span style={{ fontSize: '1.45rem', fontWeight: 800, color: s.color, lineHeight: 1.1 }}>{s.val}</span>
+                <span style={{ fontSize: '0.68rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.6px', marginTop: '0.2rem' }}>{s.label}</span>
+              </motion.div>
+            ))}
           </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-            className="flex flex-wrap gap-3 items-center"
-            style={{ width: '100%' }}
-          >
+
+          {/* CTA Buttons */}
+          <motion.div variants={fadeUp} className="flex flex-wrap gap-3 items-center">
             <div className="flex gap-2 flex-wrap items-center">
               <a href="#projects" className="btn btn-primary flex items-center gap-1">
                 View My Work <FiArrowRight />
               </a>
-              <a href="https://www.linkedin.com/in/siva-pandi-v-4b75492a3" target="_blank" rel="noreferrer" className="btn btn-outline">
-                View Resume
+              <a href="/resume.pdf" target="_blank" rel="noreferrer" className="btn btn-outline flex items-center gap-1">
+                <FiDownload /> Resume
               </a>
             </div>
 
-            {/* Quick Social Icons Row */}
+            {/* Social icons */}
             <div className="flex gap-2 items-center" style={{ paddingLeft: '0.25rem' }}>
-              <a 
-                href="https://github.com/ssivapandi" 
-                target="_blank" 
-                rel="noreferrer"
-                className="contact-card-icon" 
-                style={{ width: '40px', height: '40px', fontSize: '1.15rem', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', margin: 0 }}
-                title="GitHub Profile"
-              >
-                <FiGithub />
-              </a>
-              <a 
-                href="https://www.linkedin.com/in/siva-pandi-v-4b75492a3" 
-                target="_blank" 
-                rel="noreferrer"
-                className="contact-card-icon" 
-                style={{ width: '40px', height: '40px', fontSize: '1.15rem', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', margin: 0 }}
-                title="LinkedIn Profile"
-              >
-                <FiLinkedin />
-              </a>
-              <a 
-                href="mailto:vsivapandi86@gmail.com"
-                className="contact-card-icon" 
-                style={{ width: '40px', height: '40px', fontSize: '1.15rem', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', margin: 0 }}
-                title="Email Me"
-              >
-                <FiMail />
-              </a>
+              {[
+                { href: 'https://github.com/SivaPandiv', icon: <FiGithub />, title: 'GitHub', color: '#ffffff' },
+                { href: 'https://www.linkedin.com/in/siva-pandi-v-4b75492a3', icon: <FiLinkedin />, title: 'LinkedIn', color: '#0a66c2' },
+                { href: 'mailto:vsivapandi86@gmail.com', icon: <FiMail />, title: 'Email', color: '#38bdf8' },
+              ].map((s) => (
+                <motion.a key={s.title} href={s.href} target="_blank" rel="noreferrer"
+                  title={s.title}
+                  whileHover={{ scale: 1.15, y: -3 }}
+                  whileTap={{ scale: 0.92 }}
+                  className="hero-social-btn">
+                  {s.icon}
+                </motion.a>
+              ))}
             </div>
           </motion.div>
-        </div>
+        </motion.div>
 
-        {/* Right Content Area (Image + Sketchfab Selector) */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {/* Dynamic Graphic Container */}
-          <motion.div
-             initial={{ opacity: 0, scale: 0.9 }}
-             animate={{ opacity: 1, scale: 1 }}
-             transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
-             style={{ display: 'flex', justifyContent: 'center', position: 'relative', width: '100%', maxWidth: '360px' }}
-          >
+        {/* ── Right: Avatar ── */}
+        <motion.div
+          variants={scaleIn} initial="hidden" animate="show"
+          transition={{ delay: 0.45, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', width: '100%', maxWidth: '360px' }}>
             <div className="scanner-container">
-              {/* Outer rings & scanner corners (only display for AI avatar mode for visual simplicity) */}
               {activeTab === 'avatar' && (
                 <>
-                  <div className="scanner-ring-dashed"></div>
-                  <div className="scanner-ring-solid"></div>
+                  <div className="scanner-ring-dashed" />
+                  <div className="scanner-ring-solid" />
                   <div className="scanner-corners">
-                    <div className="scanner-corner scanner-corner-tl"></div>
-                    <div className="scanner-corner scanner-corner-tr"></div>
-                    <div className="scanner-corner scanner-corner-bl"></div>
-                    <div className="scanner-corner scanner-corner-br"></div>
+                    <div className="scanner-corner scanner-corner-tl" />
+                    <div className="scanner-corner scanner-corner-tr" />
+                    <div className="scanner-corner scanner-corner-bl" />
+                    <div className="scanner-corner scanner-corner-br" />
                   </div>
 
-                  {/* Orbit Floating Badges */}
-                  <motion.div 
-                    className="floating-badge"
-                    style={{ top: '5%', left: '-12%' }}
-                    animate={{ y: [0, -12, 0] }}
-                    transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                  >
+                  <motion.div className="floating-badge" style={{ top: '5%', left: '-12%' }}
+                    animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}>
                     <FiCode style={{ color: 'var(--accent-primary)' }} />
                     <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Python</span>
                   </motion.div>
 
-                  <motion.div 
-                    className="floating-badge"
-                    style={{ bottom: '15%', right: '-12%' }}
-                    animate={{ y: [0, 12, 0] }}
-                    transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }}
-                  >
+                  <motion.div className="floating-badge" style={{ bottom: '15%', right: '-12%' }}
+                    animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut', delay: 0.5 }}>
                     <FiDatabase style={{ color: 'var(--accent-secondary)' }} />
                     <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>SQL & DB</span>
                   </motion.div>
 
-                  <motion.div 
-                    className="floating-badge"
-                    style={{ bottom: '-5%', left: '10%' }}
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 1 }}
-                  >
+                  <motion.div className="floating-badge" style={{ bottom: '-5%', left: '10%' }}
+                    animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut', delay: 1 }}>
                     <FiCpu style={{ color: 'var(--accent-primary)' }} />
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Data Analyst</span>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Data Scientist</span>
                   </motion.div>
 
-                  <motion.div 
-                    className="floating-badge"
-                    style={{ top: '22%', right: '-15%' }}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 5.5, ease: "easeInOut", delay: 0.7 }}
-                  >
+                  <motion.div className="floating-badge" style={{ top: '22%', right: '-15%' }}
+                    animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 5.5, ease: 'easeInOut', delay: 0.7 }}>
                     <FiCode style={{ color: 'var(--accent-rose)' }} />
                     <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>React & JS</span>
                   </motion.div>
                 </>
               )}
 
-              {/* Graphic Renderer */}
-              {activeTab === 'avatar' ? (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '30%',
-                  padding: '6px',
-                  background: 'var(--accent-gradient)',
-                  boxShadow: '0 0 50px rgba(168, 85, 247, 0.25)',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  zIndex: 2
-                }}>
-                  <motion.img 
-                    src={profileImg} 
-                    alt="Developer Avatar" 
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover', 
-                      objectPosition: 'center',
-                      borderRadius: '30%',
-                      border: '5px solid var(--bg-color)',
-                      cursor: 'pointer'
-                    }} 
-                  />
-                </div>
-              ) : (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '30%',
-                  padding: '6px',
-                  background: 'var(--accent-gradient)',
-                  boxShadow: '0 0 50px rgba(168, 85, 247, 0.25)',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  zIndex: 2,
-                  aspectRatio: '1/1'
-                }}>
-                  <iframe 
-                    title={activeTab === 'robot' ? "PAC4 - GameBoy Cartridge Robot" : "Technology Isometric Room"} 
-                    frameBorder="0" 
-                    allowFullScreen 
-                    mozallowfullscreen="true" 
-                    webkitallowfullscreen="true" 
-                    allow="autoplay; fullscreen; xr-spatial-tracking" 
-                    src={activeTab === 'robot' 
-                      ? "https://sketchfab.com/models/343be1ea22e542ecb7ec4bf088eb49ba/embed?autostart=1&autospin=0.2&preload=1&ui_controls=0&ui_infos=0&ui_watermark=0" 
-                      : "https://sketchfab.com/models/e6fb368759fb49f1a0e8890787e79391/embed?autostart=1&autospin=0.2&preload=1&ui_controls=0&ui_infos=0&ui_watermark=0"
-                    }
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      borderRadius: '30%',
-                      border: '5px solid var(--bg-color)',
-                      background: 'var(--bg-secondary)'
-                    }}
-                  />
-                </div>
-              )}
+              <div style={{
+                width: '100%', height: '100%', borderRadius: '30%', padding: '6px',
+                background: 'var(--accent-gradient)',
+                boxShadow: '0 0 60px rgba(59,130,246,0.3), 0 0 120px rgba(6,182,212,0.15)',
+                overflow: 'hidden', position: 'relative', zIndex: 2
+              }}>
+                <motion.img
+                  src={profileImg} alt="V. Siva Pandi — Developer Avatar"
+                  whileHover={{ scale: 1.05 }} transition={{ duration: 0.4, ease: 'easeOut' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', borderRadius: '30%', border: '5px solid var(--bg-color)', cursor: 'pointer' }}
+                />
+              </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
 
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}
+        style={{ position: 'absolute', bottom: '2.5rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}>
+        <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', letterSpacing: '2px', textTransform: 'uppercase' }}>Scroll</span>
+        <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+          style={{ width: '1px', height: '32px', background: 'linear-gradient(to bottom, var(--accent-primary), transparent)' }} />
+      </motion.div>
+
     </section>
   );
 }
