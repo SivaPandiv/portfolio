@@ -44,8 +44,9 @@ export default function Navbar() {
           <motion.a href="#" className="nav-logo"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}>
-            &lt;V.SP&gt;
+            transition={{ duration: 0.5 }}
+            style={{ fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>
+            V.SP<span style={{ color: 'var(--accent-primary)' }}>.</span>
           </motion.a>
 
           {/* Desktop Nav Links */}

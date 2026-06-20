@@ -30,48 +30,34 @@ export default function About() {
 
   const skillsData = [
     // ── Programming Languages ──────────────────
-    { name: 'Python',      category: 'Programming', level: '90%', icon: <SiPython />,      color: '#3776AB' },
+    { name: 'Python',      category: 'Programming', level: '95%', icon: <SiPython />,      color: '#3776AB' },
     { name: 'Java',        category: 'Programming', level: '85%', icon: <FiCode />,        color: '#ED8B00' },
     { name: 'JavaScript',  category: 'Programming', level: '90%', icon: <SiJavascript />,  color: '#F7DF1E' },
-    { name: 'C++',         category: 'Programming', level: '75%', icon: <SiCplusplus />,   color: '#00599C' },
-    { name: 'C',           category: 'Programming', level: '80%', icon: <SiC />,           color: '#A8B9CC' },
-    { name: 'SQL',         category: 'Programming', level: '85%', icon: <SiMysql />,       color: '#4479A1' },
+    { name: 'SQL',         category: 'Programming', level: '90%', icon: <SiMysql />,       color: '#4479A1' },
 
     // ── Web Development ────────────────────────
-    { name: 'HTML5',       category: 'WebDev', level: '95%', icon: <SiHtml5 />,      color: '#E34F26' },
-    { name: 'CSS3',        category: 'WebDev', level: '92%', icon: <SiCss />,        color: '#1572B6' },
-    { name: 'React',       category: 'WebDev', level: '80%', icon: <SiReact />,      color: '#61DAFB' },
-    { name: 'Bootstrap',   category: 'WebDev', level: '85%', icon: <SiBootstrap />,  color: '#7952B3' },
+    { name: 'React',       category: 'WebDev', level: '85%', icon: <SiReact />,      color: '#61DAFB' },
     { name: 'Flask',       category: 'WebDev', level: '80%', icon: <SiFlask />,      color: '#CCCCCC' },
-    { name: 'Git',         category: 'WebDev', level: '88%', icon: <SiGit />,        color: '#F05032' },
+    { name: 'Git / CI-CD', category: 'WebDev', level: '88%', icon: <SiGit />,        color: '#F05032' },
 
     // ── Databases ──────────────────────────────
-    { name: 'MySQL',      category: 'Databases', level: '85%', icon: <SiMysql />,      color: '#4479A1' },
-    { name: 'PostgreSQL', category: 'Databases', level: '80%', icon: <SiPostgresql />, color: '#336791' },
-    { name: 'MongoDB',    category: 'Databases', level: '75%', icon: <SiMongodb />,    color: '#47A248' },
+    { name: 'PostgreSQL', category: 'Databases', level: '85%', icon: <SiPostgresql />, color: '#336791' },
+    { name: 'MongoDB',    category: 'Databases', level: '80%', icon: <SiMongodb />,    color: '#47A248' },
 
     // ── AI / ML ────────────────────────────────
-    { name: 'TensorFlow',      category: 'AI_ML', level: '70%', icon: <SiTensorflow />, color: '#FF6F00' },
-    { name: 'PyTorch',         category: 'AI_ML', level: '75%', icon: <SiPytorch />,    color: '#EE4C2C' },
-    { name: 'LLM Integration', category: 'AI_ML', level: '80%', icon: <FiCpu />,        color: '#a855f7' },
-    { name: 'Computer Vision', category: 'AI_ML', level: '80%', icon: <FiEye />,        color: '#ec4899' },
+    { name: 'TensorFlow', category: 'AI_ML', level: '80%', icon: <SiTensorflow />, color: '#FF6F00' },
+    { name: 'PyTorch',    category: 'AI_ML', level: '75%', icon: <SiPytorch />,    color: '#EE4C2C' },
+    { name: 'LLM & GenAI',category: 'AI_ML', level: '85%', icon: <FiCpu />,        color: '#a855f7' },
 
     // ── Data Science ──────────────────────────
-    { name: 'NumPy',        category: 'DataScience', level: '88%', icon: <SiNumpy />,       color: '#4DABCF' },
-    { name: 'Pandas',       category: 'DataScience', level: '85%', icon: <SiPandas />,      color: '#e08e2c' },
-    { name: 'Scikit-Learn', category: 'DataScience', level: '82%', icon: <SiScikitlearn />, color: '#F7931E' },
-    { name: 'Matplotlib',   category: 'DataScience', level: '80%', icon: <SiPlotly />,      color: '#11A9BA' },
-    { name: 'Seaborn',      category: 'DataScience', level: '78%', icon: <FiActivity />,    color: '#4C72B0' },
-    { name: 'SciPy',        category: 'DataScience', level: '75%', icon: <SiScipy />,       color: '#8CAAE6' },
-    { name: 'EDA',          category: 'DataScience', level: '85%', icon: <FiBarChart2 />,   color: '#38bdf8' },
+    { name: 'Pandas',       category: 'DataScience', level: '90%', icon: <SiPandas />,      color: '#e08e2c' },
+    { name: 'Scikit-Learn', category: 'DataScience', level: '85%', icon: <SiScikitlearn />, color: '#F7931E' },
+    { name: 'Data Vis.',    category: 'DataScience', level: '85%', icon: <FiBarChart2 />,   color: '#38bdf8' },
 
     // ── Tools & IDEs ──────────────────────────
-    { name: 'VS Code',  category: 'Tools', level: '95%', icon: <FiMonitor />,    color: '#007ACC' },
-    { name: 'PyCharm',  category: 'Tools', level: '85%', icon: <SiPycharm />,    color: '#21D789' },
     { name: 'Power BI', category: 'Tools', level: '85%', icon: <FiBarChart2 />,  color: '#F2C811' },
     { name: 'Tableau',  category: 'Tools', level: '80%', icon: <FiGrid />,       color: '#E97627' },
-    { name: 'Excel',    category: 'Tools', level: '90%', icon: <FiTool />,       color: '#217346' },
-    { name: 'Eclipse',  category: 'Tools', level: '75%', icon: <SiEclipseide />, color: '#2C2255' },
+    { name: 'VS Code',  category: 'Tools', level: '95%', icon: <FiMonitor />,    color: '#007ACC' },
   ];
 
   const experience = [
@@ -79,19 +65,19 @@ export default function About() {
       role: "Data Analytics & Python Intern",
       company: "Assure eService, Chennai",
       period: "FEB 2026 – APRIL 2026",
-      desc: "Completed a Data Analytics project using Python, Power BI, and Tableau. Performed data cleaning, exploratory data analysis (EDA), and visualization on structured datasets. Developed interactive dashboards and generated actionable insights to support data-driven decision-making."
+      desc: "Conducted comprehensive data analysis using Python, Power BI, and Tableau. Cleaned and processed structured datasets, performed exploratory data analysis (EDA), and developed interactive dashboards to provide actionable business insights."
     },
     {
       role: "Full Stack Java Intern",
-      company: "Techvolt Software Solution, Coimbatore",
+      company: "Techvolt Software Solution, Chennai",
       period: "JUNE 2025 – JULY 2025",
-      desc: "Completed a Full-Stack Development Internship using Java technologies. Worked on web application development, frontend integration, and backend support while collaborating in an agile team environment."
+      desc: "Developed and maintained full-stack web applications using Java technologies. Collaborated in an Agile team environment to integrate frontend components with backend APIs, ensuring reliable application performance and seamless user experiences."
     },
     {
       role: "Web Development Intern",
       company: "Thirumular IT Solutions, Chennai",
       period: "FEB 2025 – MAR 2025",
-      desc: "Completed a Web Development Internship at Thirumular IT Solutions, Chennai. Developed responsive web applications and gained experience in frontend development and project collaboration."
+      desc: "Built responsive and interactive web applications focusing on clean design and usability. Worked closely with the team to develop frontend features, optimize page load times, and implement standard web development practices."
     }
   ];
 
@@ -152,7 +138,7 @@ export default function About() {
           <div className="section-divider" />
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', marginTop: '0.5rem' }}>
+        <div className="responsive-grid" style={{ marginTop: '0.5rem' }}>
 
           {/* ── Left Column: Experience & Education ── */}
           <div className="flex flex-col gap-8">
@@ -323,15 +309,27 @@ export default function About() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8, y: 10 }}
                     transition={{ duration: 0.3, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
-                    whileHover={{ scale: 1.08, y: -6 }}
+                    whileHover={{ 
+                      scale: 1.08, 
+                      y: -6,
+                      boxShadow: `0 15px 30px -10px ${skill.color}60`,
+                      borderColor: `${skill.color}80`
+                    }}
                     className="glass skill-card flex flex-col items-center justify-center"
-                    style={{ padding: '1.1rem 0.75rem', borderRadius: '1rem', textAlign: 'center', cursor: 'default', gap: '0.5rem' }}
+                    style={{ 
+                      padding: '1.1rem 0.75rem', 
+                      borderRadius: '1rem', 
+                      textAlign: 'center', 
+                      cursor: 'pointer', 
+                      gap: '0.5rem',
+                      transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
+                    }}
                   >
                     <div style={{
                       fontSize: '2rem',
                       color: skill.color,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      filter: `drop-shadow(0 0 8px ${skill.color}55)`,
+                      filter: `drop-shadow(0 0 2px ${skill.color}40)`,
                       transition: 'filter 0.3s ease'
                     }}>
                       {skill.icon}

@@ -1,19 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import emailjs from '@emailjs/browser';
-import { FiMail, FiLinkedin, FiGithub, FiSend, FiUser, FiMessageSquare } from 'react-icons/fi';
+import { FiMail, FiLinkedin, FiGithub, FiSend, FiUser, FiMessageSquare, FiLoader } from 'react-icons/fi';
 import { fadeUp, fadeLeft, fadeRight, staggerContainer, viewport } from '../utils/animations';
-
-// ─── EmailJS Config ───────────────────────────────────────────────
-// 1. Go to https://dashboard.emailjs.com
-// 2. Create a Gmail service  →  copy Service ID below
-// 3. Create a template with variables: {{from_name}}, {{from_email}}, {{message}}
-//    Set "To Email" = vsivapandi86@gmail.com  →  copy Template ID below
-// 4. Account > API Keys  →  copy Public Key below
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'abc123XYZ'
-// ─────────────────────────────────────────────────────────────────
 
 export default function Contact() {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
@@ -24,27 +12,35 @@ export default function Contact() {
     if (!formState.name || !formState.email || !formState.message) return;
 
     setStatus('loading');
+    
     try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          from_name:  formState.name,
-          from_email: formState.email,
-          message:    formState.message,
-          to_email:   'vsivapandi86@gmail.com',
-        },
-        EMAILJS_PUBLIC_KEY
-      );
-      setStatus('success');
-      setTimeout(() => {
-        setStatus('idle');
-        setFormState({ name: '', email: '', message: '' });
-      }, 4000);
+      const formData = new FormData();
+      formData.append("name", formState.name);
+      formData.append("email", formState.email);
+      formData.append("message", formState.message);
+      formData.append("_subject", `Portfolio Contact from ${formState.name}`);
+      formData.append("_captcha", "false"); // Disables captcha for AJAX
+
+      const response = await fetch("https://formsubmit.co/ajax/vsivapandi86@gmail.com", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        setStatus('success');
+        setTimeout(() => {
+          setStatus('idle');
+          setFormState({ name: '', email: '', message: '' });
+        }, 5000);
+      } else {
+        throw new Error(result.message || "Failed to send");
+      }
     } catch (err) {
-      console.error('EmailJS error:', err);
+      console.error('FormSubmit error:', err);
       setStatus('error');
-      setTimeout(() => setStatus('idle'), 3500);
+      setTimeout(() => setStatus('idle'), 4000);
     }
   };
 
@@ -52,7 +48,7 @@ export default function Contact() {
     {
       label: "Email Me",
       value: "vsivapandi86@gmail.com",
-      href: "mailto:vsivapandi86@gmail.com",
+      href: "https://mail.google.com/mail/?view=cm&fs=1&to=vsivapandi86@gmail.com",
       icon: <FiMail />,
       color: '#38bdf8'
     },
@@ -181,9 +177,9 @@ export default function Contact() {
                   >
                     ✓
                   </motion.div>
-                  <h3 className="text-2xl" style={{ marginBottom: '0.75rem', fontWeight: 800 }}>Message Ready!</h3>
+                  <h3 className="text-2xl" style={{ marginBottom: '0.75rem', fontWeight: 800 }}>Message Sent!</h3>
                   <p className="text-muted text-sm" style={{ maxWidth: '280px', lineHeight: '1.6' }}>
-                    Your mail client has opened with the pre-filled message. Just hit Send!
+                    Thank you for reaching out. I'll get back to you as soon as possible!
                   </p>
                 </motion.div>
               ) : (
@@ -206,6 +202,7 @@ export default function Contact() {
                     </label>
                     <input
                       type="text"
+                      name="name"
                       placeholder="e.g. Siva Pandi"
                       className="form-input"
                       value={formState.name}
@@ -221,6 +218,7 @@ export default function Contact() {
                     </label>
                     <input
                       type="email"
+                      name="email"
                       placeholder="you@example.com"
                       className="form-input"
                       value={formState.email}
@@ -235,6 +233,7 @@ export default function Contact() {
                       <FiMessageSquare style={{ color: 'var(--accent-primary)' }} /> Message
                     </label>
                     <textarea
+                      name="message"
                       placeholder="Tell me about your project or just say hello!"
                       className="form-input"
                       style={{ minHeight: '110px', resize: 'vertical' }}
@@ -265,7 +264,7 @@ export default function Contact() {
                     >
                       {status === 'loading' ? (
                         <>
-                          <span>Opening Mail…</span>
+                          <span>Sending…</span>
                           <FiLoader style={{ animation: 'spin 1s linear infinite' }} />
                         </>
                       ) : (

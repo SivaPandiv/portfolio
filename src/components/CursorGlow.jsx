@@ -29,11 +29,22 @@ export default function CursorGlow() {
       targetY = e.clientY;
     };
 
+    const onMouseDown = () => {
+      glow.style.transform = 'translate(-50%, -50%) scale(0.6)';
+      glow.style.background = 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%)';
+      setTimeout(() => {
+        glow.style.transform = 'translate(-50%, -50%) scale(1)';
+        glow.style.background = 'var(--cursor-glow)';
+      }, 150);
+    };
+
     window.addEventListener('mousemove', onMove);
+    window.addEventListener('mousedown', onMouseDown);
     raf = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mousedown', onMouseDown);
       cancelAnimationFrame(raf);
     };
   }, []);
