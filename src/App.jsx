@@ -12,13 +12,12 @@ import ClickEffect from './components/ClickEffect';
 import RobotCursor from './components/RobotCursor';
 import ScrollProgress from './components/ScrollProgress';
 
-// Section fade wrapper
 const SectionFade = ({ children }) => (
   <motion.div
-    initial={{ opacity: 0, y: 30 }}
+    initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: false, margin: '-80px' }}
-    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+    transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
   >
     {children}
   </motion.div>
@@ -27,24 +26,30 @@ const SectionFade = ({ children }) => (
 function App() {
   return (
     <>
-      {/* Background layers */}
+      {/* Global aurora background blobs */}
+      <div className="aurora-blob aurora-1" />
+      <div className="aurora-blob aurora-2" />
+      <div className="aurora-blob aurora-3" />
+
+      {/* Grid overlay */}
+      <div className="bg-grid" />
+
+      {/* Interactive layers */}
       <ParticleBackground />
       <CursorGlow />
       <ClickEffect />
       <RobotCursor />
       <ScrollProgress />
 
-      {/* Page content with initial zoom-in */}
+      {/* Page content */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.97 }}
+        initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, ease: 'easeOut' }}
+        transition={{ duration: 1, ease: 'easeOut' }}
       >
         <Navbar />
         <main>
-          {/* Hero does its own entry animation */}
           <Hero />
-
           <SectionFade><About /></SectionFade>
           <SectionFade><Projects /></SectionFade>
           <SectionFade><Certifications /></SectionFade>

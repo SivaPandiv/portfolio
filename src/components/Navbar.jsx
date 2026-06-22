@@ -5,9 +5,9 @@ import { FiMenu, FiX } from 'react-icons/fi';
 const NAV_ITEMS = ['About', 'Projects', 'Certifications', 'Contact'];
 
 export default function Navbar() {
-  const [scrolled, setScrolled]   = useState(false);
-  const [active,   setActive]     = useState('');
-  const [menuOpen, setMenuOpen]   = useState(false);
+  const [scrolled,  setScrolled]  = useState(false);
+  const [active,    setActive]    = useState('');
+  const [menuOpen,  setMenuOpen]  = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -24,16 +24,12 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  const handleNavClick = (item) => {
-    setMenuOpen(false);
-    setActive(item.toLowerCase());
-  };
+  const handleNavClick = (item) => { setMenuOpen(false); setActive(item.toLowerCase()); };
 
   return (
     <>
@@ -45,8 +41,9 @@ export default function Navbar() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            style={{ fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>
-            V.SP<span style={{ color: 'var(--accent-primary)' }}>.</span>
+          >
+            V. Siva<span style={{ color: 'var(--accent-secondary)' }}> Pandi</span>
+            <span style={{ color: 'var(--accent-primary)' }}>.</span>
           </motion.a>
 
           {/* Desktop Nav Links */}
@@ -59,7 +56,8 @@ export default function Navbar() {
                 <a
                   href={`#${item.toLowerCase()}`}
                   onClick={() => handleNavClick(item)}
-                  style={{ color: active === item.toLowerCase() ? 'var(--text-primary)' : undefined }}>
+                  style={{ color: active === item.toLowerCase() ? 'var(--text-primary)' : undefined }}
+                >
                   {item}
                   {active === item.toLowerCase() && (
                     <motion.span layoutId="nav-active"
@@ -68,7 +66,7 @@ export default function Navbar() {
                         width: '100%', height: '2px',
                         background: 'var(--accent-gradient)',
                         borderRadius: '2px',
-                        boxShadow: '0 0 8px rgba(56,189,248,0.7)'
+                        boxShadow: '0 0 10px rgba(59,130,246,0.8)',
                       }} />
                   )}
                 </a>
@@ -89,19 +87,15 @@ export default function Navbar() {
             </motion.a>
 
             {/* Mobile hamburger */}
-            <button
-              className="nav-toggle"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu">
+            <button className="nav-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
               <AnimatePresence mode="wait">
                 {menuOpen
-                  ? <motion.span key="x"   initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}><FiX size={22} style={{ color: 'var(--text-primary)' }} /></motion.span>
+                  ? <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}><FiX size={22} style={{ color: 'var(--text-primary)' }} /></motion.span>
                   : <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}><FiMenu size={22} style={{ color: 'var(--text-secondary)' }} /></motion.span>
                 }
               </AnimatePresence>
             </button>
           </div>
-
         </div>
       </nav>
 
@@ -109,30 +103,25 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <>
-            {/* Backdrop */}
-            <motion.div
-              key="backdrop"
+            <motion.div key="backdrop"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setMenuOpen(false)}
-              style={{
-                position: 'fixed', inset: 0, zIndex: 98,
-                background: 'rgba(6,13,26,0.7)', backdropFilter: 'blur(6px)'
-              }} />
+              style={{ position: 'fixed', inset: 0, zIndex: 98, background: 'rgba(6,11,20,0.75)', backdropFilter: 'blur(8px)' }} />
 
-            {/* Drawer panel */}
-            <motion.div
-              key="drawer"
+            <motion.div key="drawer"
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
-              transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               style={{
                 position: 'fixed', top: 0, right: 0, bottom: 0,
                 width: 'min(300px, 80vw)', zIndex: 99,
-                background: 'rgba(8,15,32,0.98)',
-                backdropFilter: 'blur(24px)',
+                background: 'rgba(6,11,20,0.98)',
+                backdropFilter: 'blur(28px)',
                 borderLeft: '1px solid var(--glass-border)',
-                display: 'flex', flexDirection: 'column',
-                padding: '5rem 2rem 2rem'
+                display: 'flex', flexDirection: 'column', padding: '5rem 2rem 2rem',
               }}>
+              {/* Top accent line */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'var(--accent-gradient)' }} />
+
               <nav>
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   {NAV_ITEMS.map((item, i) => (
@@ -140,21 +129,20 @@ export default function Navbar() {
                       initial={{ opacity: 0, x: 30 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.05 * i, duration: 0.3 }}>
-                      <a
-                        href={`#${item.toLowerCase()}`}
-                        onClick={() => handleNavClick(item)}
+                      <a href={`#${item.toLowerCase()}`} onClick={() => handleNavClick(item)}
                         style={{
                           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                           padding: '1rem 1.25rem', borderRadius: '0.85rem',
                           textDecoration: 'none', fontWeight: 700, fontSize: '1.05rem',
                           color: active === item.toLowerCase() ? '#fff' : 'var(--text-secondary)',
                           background: active === item.toLowerCase() ? 'rgba(59,130,246,0.1)' : 'transparent',
-                          border: active === item.toLowerCase() ? '1px solid rgba(59,130,246,0.2)' : '1px solid transparent',
-                          transition: 'all 0.2s ease'
+                          border: active === item.toLowerCase() ? '1px solid rgba(59,130,246,0.25)' : '1px solid transparent',
+                          transition: 'all 0.2s ease',
+                          fontFamily: 'var(--font-body)',
                         }}>
                         {item}
                         {active === item.toLowerCase() && (
-                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-primary)', boxShadow: '0 0 8px var(--accent-primary)' }} />
+                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-primary)', boxShadow: '0 0 10px var(--accent-primary)' }} />
                         )}
                       </a>
                     </motion.li>
@@ -168,7 +156,7 @@ export default function Navbar() {
                   onClick={() => setMenuOpen(false)}>
                   Hire Me
                 </a>
-                <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '1.25rem', opacity: 0.6 }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '1.25rem', opacity: 0.5 }}>
                   © {new Date().getFullYear()} V. Siva Pandi
                 </p>
               </div>

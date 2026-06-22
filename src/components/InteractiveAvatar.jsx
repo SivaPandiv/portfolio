@@ -1,6 +1,5 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
-import { useEffect } from 'react';
 
 export default function InteractiveAvatar() {
   return (
